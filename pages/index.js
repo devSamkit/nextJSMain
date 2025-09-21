@@ -1,120 +1,70 @@
-import { useEffect, useRef } from "react";
+import Head from "next/head";
+import Starfield from "../components/Starfield";
+import Image from "next/image";
 
 export default function Home() {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    let stars = [];
-    let animationFrame;
-    let mouse = { x: 0, y: 0 }; // Track mouse position
-    let parallax = { x: 0, y: 0 }; // Smooth movement effect
-
-    function resize() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-    window.addEventListener("resize", resize);
-    resize();
-
-    // Mouse movement listener
-    window.addEventListener("mousemove", (e) => {
-      mouse.x = (e.clientX / window.innerWidth - 0.5) * 2; // -1 to 1
-      mouse.y = (e.clientY / window.innerHeight - 0.5) * 2; // -1 to 1
-    });
-
-    // Generate stars
-    for (let i = 0; i < 200; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        radius: Math.random() * 1.5 + 0.3,
-        velocity: Math.random() * 0.15 + 0.05,
-        alpha: Math.random(),
-        alphaChange: Math.random() * 0.02 + 0.005,
-        depth: Math.random() * 0.6 + 0.4, // parallax depth
-      });
-    }
-
-    function animate() {
-      // Smoothly interpolate parallax position
-      parallax.x += (mouse.x - parallax.x) * 0.05;
-      parallax.y += (mouse.y - parallax.y) * 0.05;
-
-      // Gradient background
-      const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, "#0a001a");
-      gradient.addColorStop(1, "#000814");
-      ctx.fillStyle = gradient;
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      stars.forEach((star) => {
-        // Twinkle
-        star.alpha += star.alphaChange;
-        if (star.alpha <= 0 || star.alpha >= 1) {
-          star.alphaChange = -star.alphaChange;
-        }
-
-        // Move stars downward
-        star.y += star.velocity;
-        if (star.y > canvas.height) star.y = 0;
-
-        // Apply parallax shift (closer stars move more)
-        const offsetX = parallax.x * star.depth * 20;
-        const offsetY = parallax.y * star.depth * 20;
-
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
-        ctx.beginPath();
-        ctx.arc(star.x + offsetX, star.y + offsetY, star.radius, 0, Math.PI * 2);
-        ctx.fill();
-      });
-
-      animationFrame = requestAnimationFrame(animate);
-    }
-
-    animate();
-
-    return () => {
-      cancelAnimationFrame(animationFrame);
-      window.removeEventListener("resize", resize);
-    };
-  }, []);
-
   return (
-    <main style={styles.main}>
-      <canvas ref={canvasRef} style={styles.canvas} />
-      <div style={styles.content}>
-        <h1 style={styles.title}>Hey, I'm Samkit</h1>
-        <p style={styles.subtitle}>I build cool things for the web.</p>
+    <>
+      <Head>
+        <title>Foxtako</title>
+        <meta name="description" content="Foxtako - Portfolio and Projects" />
+        <link rel="icon" href="/favicon.png" />
+        <meta property="og:title" content="Foxtako - Portfolio & Projects" />
+        <meta
+          property="og:description"
+          content="I build cool things for the web. Check out my projects."
+        />
+        <meta property="og:image" content="/foxtako-logo.png" />
+        <meta property="og:type" content="website" />
+      </Head>
 
-        <div style={styles.links}>
-          <a href="https://github.com/yourusername" target="_blank" rel="noopener noreferrer">
-            GitHub
-          </a>
-          <a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer">
-            LinkedIn
-          </a>
-          <a href="/blog">Blog</a>
+      <main style={styles.main}>
+        <Starfield />
+        <div style={styles.content}>
+          <Image
+            src="/foxtako-logo.png"
+            alt="Foxtako Logo"
+            width={120}
+            height={120}
+            style={styles.logo}
+          />
+          <h1 style={styles.title}>Hey, I'm Samkit</h1>
+          <p style={styles.subtitle}>I build cool things for the web.</p>
+
+          <div style={styles.links}>
+            <a
+              href="https://github.com/devSamkit"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={styles.linkButton}
+            >
+              GitHub
+            </a>
+            <a
+              href="https://www.linkedin.com/in/jsamkit"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={styles.linkButton}
+            >
+              LinkedIn
+            </a>
+            <a
+              href="https://instagram.com/samkitjain__"
+              target="_blank"
+              rel="noopener noreferrer"
+              style={styles.linkButton}
+            >
+              Instagram
+            </a>
+          </div>
         </div>
-      </div>
-    </main>
+      </main>
+    </>
   );
 }
 
 const styles = {
-  main: {
-    position: "relative",
-    height: "100vh",
-    width: "100%",
-    overflow: "hidden",
-  },
-  canvas: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    zIndex: 0,
-  },
+  main: { position: "relative", height: "100vh", width: "100%", overflow: "hidden" },
   content: {
     position: "relative",
     zIndex: 1,
@@ -126,20 +76,26 @@ const styles = {
     color: "#fff",
     fontFamily: "sans-serif",
     textAlign: "center",
-    userSelect: "none",
   },
-  title: {
-    fontSize: "3rem",
+  logo: {
+    borderRadius: "50%",
+    boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
     marginBottom: "1rem",
   },
-  subtitle: {
-    fontSize: "1.25rem",
-    marginBottom: "2rem",
-    color: "#aaa",
-  },
+  title: { fontSize: "3rem", marginBottom: "1rem" },
+  subtitle: { fontSize: "1.25rem", marginBottom: "2rem", color: "#aaa" },
   links: {
     display: "flex",
-    gap: "1.5rem",
-    fontSize: "1rem",
+    gap: "1rem",
+    marginTop: "1rem",
+  },
+  linkButton: {
+    padding: "0.5rem 1rem",
+    borderRadius: "9999px",
+    backgroundColor: "rgba(255, 255, 255, 0.1)",
+    color: "#fff",
+    textDecoration: "none",
+    border: "1px solid rgba(255,255,255,0.2)",
+    transition: "all 0.3s ease",
   },
 };
