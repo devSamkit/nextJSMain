@@ -24,8 +24,8 @@ export default function Home() {
           <Image
             src="/foxtako-logo.png"
             alt="Foxtako Logo"
-            width={120}
-            height={120}
+            width={200}
+            height={200}
             style={styles.logo}
           />
           <h1 style={styles.title}>Hey, I'm Samkit</h1>
@@ -78,9 +78,8 @@ const styles = {
     textAlign: "center",
   },
   logo: {
-    borderRadius: "50%",
-    boxShadow: "0 0 20px rgba(255, 255, 255, 0.3)",
     marginBottom: "1rem",
+    filter: "drop-shadow(0 0 20px rgba(255, 140, 0, 0.6))", // orange glow
   },
   title: { fontSize: "3rem", marginBottom: "1rem" },
   subtitle: { fontSize: "1.25rem", marginBottom: "2rem", color: "#aaa" },
