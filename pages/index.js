@@ -41,12 +41,12 @@ export default function Home() {
               GitHub
             </a>
             <a
-              href="https://www.linkedin.com/in/jsamkit"
+              href="https://blogs.foxtako.com"
               target="_blank"
               rel="noopener noreferrer"
               style={styles.linkButton}
             >
-              LinkedIn
+              Blogs
             </a>
             <a
               href="https://instagram.com/samkitjain__"
