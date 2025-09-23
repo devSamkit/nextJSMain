@@ -1,5 +1,71 @@
-/* Minimal reset */
+/* Theme variables */
+:root {
+  --background-color: #ffffff;
+  --text-color: #000000;
+  --secondary-text: #666666;
+  --link-color: #0070f3;
+  --border-color: #eaeaea;
+}
+
+[data-theme='dark'] {
+  --background-color: #000000;
+  --text-color: #ffffff;
+  --secondary-text: #a0a0a0;
+  --link-color: #3291ff;
+  --border-color: #333333;
+}
+
+/* Global styles */
 html, body {
   margin: 0;
   padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
+  font-family: 'Space Grotesk', 'Inter', sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Import cool fonts */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
+
+/* Ensures immediate dark background */
+#__next {
+  min-height: 100vh;
+  background-color: var(--background-color);
+}
+
+/* Smooth transitions */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ensure images are properly displayed */
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Custom selection color */
+::selection {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }

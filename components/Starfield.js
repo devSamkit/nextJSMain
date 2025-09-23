@@ -1,7 +1,9 @@
 import { useEffect, useRef } from "react";
+import { useTheme } from "../context/ThemeContext";
 
 export default function Starfield() {
   const canvasRef = useRef(null);
+  const { darkMode } = useTheme();
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -42,8 +44,13 @@ export default function Starfield() {
       parallax.y += (mouse.y - parallax.y) * 0.05;
 
       const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-      gradient.addColorStop(0, "#0a001a");
-      gradient.addColorStop(1, "#000814");
+      if (darkMode) {
+        gradient.addColorStop(0, "#0a001a");
+        gradient.addColorStop(1, "#000814");
+      } else {
+        gradient.addColorStop(0, "#f0f0f0");
+        gradient.addColorStop(1, "#ffffff");
+      }
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -57,7 +64,7 @@ export default function Starfield() {
         const offsetX = parallax.x * star.depth * 20;
         const offsetY = parallax.y * star.depth * 20;
 
-        ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+        ctx.fillStyle = `rgba(${darkMode ? '255, 255, 255' : '0, 0, 0'}, ${star.alpha})`;
         ctx.beginPath();
         ctx.arc(star.x + offsetX, star.y + offsetY, star.radius, 0, Math.PI * 2);
         ctx.fill();
@@ -72,7 +79,7 @@ export default function Starfield() {
       cancelAnimationFrame(animationFrame);
       window.removeEventListener("resize", resize);
     };
-  }, []);
+  }, [darkMode]);
 
   return (
     <canvas
