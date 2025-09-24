@@ -198,14 +198,14 @@ export default function Home() {
             </a>
             <span style={styles.navSeparator}>-</span>
             <a
-              href="https://samkit.foxtako.com"
+              href="https://toto.foxtako.com"
               style={styles.navButton}
             >
               resume
             </a>
             <span style={styles.navSeparator}>-</span>
             <a
-              href="https://lab.foxtako.com"
+              href="https://labs.foxtako.com"
               style={styles.navButton}
             >
               lab
