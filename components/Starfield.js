@@ -43,47 +43,24 @@ export default function Starfield() {
 
     // Function to create a shooting star
     function createShootingStar() {
-      const startSide = Math.floor(Math.random() * 4); // 0: top, 1: right, 2: bottom, 3: left
-      let startX, startY, velocityX, velocityY;
-      
-      switch (startSide) {
-        case 0: // top
-          startX = Math.random() * canvas.width;
-          startY = -20;
-          velocityX = (Math.random() - 0.5) * 12; // Wider range of horizontal movement
-          velocityY = Math.random() * 6 + 3; // Stronger downward movement
-          break;
-        case 1: // right
-          startX = canvas.width + 20;
-          startY = Math.random() * canvas.height;
-          velocityX = -(Math.random() * 6 + 3); // Stronger leftward movement
-          velocityY = (Math.random() - 0.5) * 12; // Wider range of vertical movement
-          break;
-        case 2: // bottom
-          startX = Math.random() * canvas.width;
-          startY = canvas.height + 20;
-          velocityX = (Math.random() - 0.5) * 12; // Wider range of horizontal movement
-          velocityY = -(Math.random() * 6 + 3); // Stronger upward movement
-          break;
-        case 3: // left
-          startX = -20;
-          startY = Math.random() * canvas.height;
-          velocityX = Math.random() * 6 + 3; // Stronger rightward movement
-          velocityY = (Math.random() - 0.5) * 12; // Wider range of vertical movement
-          break;
-      }
+      const angle = Math.random() * 2 * Math.PI; // Random direction (0 to 360°)
+      const speed = Math.random() * 8 + 4; // Random speed between 4–12
+
+      // Start position slightly outside the screen in the opposite direction of travel
+      const startX = canvas.width / 2 + Math.cos(angle + Math.PI) * (canvas.width * 0.6);
+      const startY = canvas.height / 2 + Math.sin(angle + Math.PI) * (canvas.height * 0.6);
 
       shootingStars.push({
         x: startX,
         y: startY,
-        velocityX: velocityX,
-        velocityY: velocityY,
-        length: Math.random() * 40 + 15, // Shorter trails
+        velocityX: Math.cos(angle) * speed,
+        velocityY: Math.sin(angle) * speed,
+        length: Math.random() * 60 + 40,
         life: 1.0,
-        decay: Math.random() * 0.1 + 0.15, // Extremely fast decay - dies in ~4-6 frames (~0.07-0.1 seconds)
-        brightness: Math.random() * 0.3 + 0.7, // Higher brightness but shorter life
-        age: 0, // Track how long the shooting star has existed
-        fadeInDuration: 2, // Very fast fade in over first 2 frames
+        decay: Math.random() * 0.01 + 0.005, // Slower decay → visible longer
+        brightness: Math.random() * 0.3 + 0.7,
+        age: 0,
+        fadeInDuration: 10, // Slower fade-in for smoother start
       });
     }
 
@@ -165,8 +142,7 @@ export default function Starfield() {
         }
       });
 
-      // Randomly create shooting stars (limit to max 2 at a time)
-      if (Math.random() < 0.00005 && shootingStars.length < 2) { // Extremely rare - roughly every 20-30 seconds
+      if (Math.random() < 0.00001 && shootingStars.length < 1) {
         createShootingStar();
       }
 
@@ -190,22 +166,26 @@ export default function Starfield() {
             ? shootingStar.age / shootingStar.fadeInDuration 
             : 1;
           
-          const alpha = shootingStar.life * shootingStar.brightness * fadeInMultiplier;
+          // Gradual appearance + fading + trail growth
+          const progress = shootingStar.age / 60; // assume ~60fps
+          const trailLength = Math.min(progress * shootingStar.length, shootingStar.length);
+          const alpha = Math.max(shootingStar.life, 0) * shootingStar.brightness * fadeInMultiplier;
+
           const color = darkMode ? '255, 255, 255' : '120, 120, 120';
-          
           gradient.addColorStop(0, `rgba(${color}, ${alpha})`);
           gradient.addColorStop(1, `rgba(${color}, 0)`);
-          
+
           ctx.strokeStyle = gradient;
           ctx.lineWidth = 2;
           ctx.lineCap = 'round';
           ctx.beginPath();
           ctx.moveTo(shootingStar.x, shootingStar.y);
           ctx.lineTo(
-            shootingStar.x - shootingStar.velocityX * shootingStar.length,
-            shootingStar.y - shootingStar.velocityY * shootingStar.length
+            shootingStar.x - shootingStar.velocityX * trailLength,
+            shootingStar.y - shootingStar.velocityY * trailLength
           );
           ctx.stroke();
+
         } else {
           shootingStars.splice(index, 1);
         }
