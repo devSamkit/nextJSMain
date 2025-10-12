@@ -27,8 +27,9 @@ const ThemeToggle = () => {
             <Image
               src={darkMode ? "/moon.svg" : "/sun.svg"}
               alt={darkMode ? "Moon" : "Sun"}
-              width={20}
-              height={20}
+              width={100}
+              height={100}
+              style={{ margin: 0, padding: 0, border: 'none' }}
             />
           </div>
         </div>
