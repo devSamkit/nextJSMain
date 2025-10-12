@@ -78,12 +78,12 @@ export default function Starfield() {
         y: startY,
         velocityX: velocityX,
         velocityY: velocityY,
-        length: Math.random() * 60 + 20,
+        length: Math.random() * 40 + 15, // Shorter trails
         life: 1.0,
-        decay: Math.random() * 0.06 + 0.08, // Much faster decay - dies in ~7-12 frames (~0.1-0.2 seconds)
-        brightness: Math.random() * 0.5 + 0.5,
+        decay: Math.random() * 0.1 + 0.15, // Extremely fast decay - dies in ~4-6 frames (~0.07-0.1 seconds)
+        brightness: Math.random() * 0.3 + 0.7, // Higher brightness but shorter life
         age: 0, // Track how long the shooting star has existed
-        fadeInDuration: 3, // Faster fade in over first 3 frames
+        fadeInDuration: 2, // Very fast fade in over first 2 frames
       });
     }
 
@@ -93,11 +93,11 @@ export default function Starfield() {
 
       const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
       if (darkMode) {
-        gradient.addColorStop(0, "#2c1810");
-        gradient.addColorStop(1, "#1a1a1a");
+        gradient.addColorStop(1, "#774069ff");
+        gradient.addColorStop(0, "#000000ff");
       } else {
-        gradient.addColorStop(0, "#f0f0f0");
-        gradient.addColorStop(1, "#ffffff");
+        gradient.addColorStop(0, "#6FDCBEff");
+        gradient.addColorStop(1, "#F6F4F6ff");
       }
       ctx.fillStyle = gradient;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -165,8 +165,8 @@ export default function Starfield() {
         }
       });
 
-      // Randomly create shooting stars
-      if (Math.random() < 0.0002) { // Much rarer - roughly every 5-10 seconds
+      // Randomly create shooting stars (limit to max 2 at a time)
+      if (Math.random() < 0.00005 && shootingStars.length < 2) { // Extremely rare - roughly every 20-30 seconds
         createShootingStar();
       }
 

@@ -29,7 +29,7 @@ const ThemeToggle = () => {
               alt={darkMode ? "Moon" : "Sun"}
               width={100}
               height={100}
-              style={{ margin: 0, padding: 0, border: 'none' }}
+              // style={{ margin: 0, padding: 0, border: 'none' }}
             />
           </div>
         </div>
